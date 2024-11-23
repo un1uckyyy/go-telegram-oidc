@@ -124,6 +124,13 @@ func (t *Service) authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	_ = t.db.SetUser(sub, telegramId)
 
+	user := &tele.User{ID: telegramId}
+
+	_, err = t.bot.Send(user, "You are successfully logged in!")
+	if err != nil {
+		logger.ErrorLogger.Println("failed to send message about successful authentication", err)
+	}
+
 	botUrl := fmt.Sprintf("https://t.me/%s", t.bot.Me.Username)
 	http.Redirect(w, r, botUrl, http.StatusSeeOther)
 }
