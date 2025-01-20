@@ -14,6 +14,10 @@ import (
 	tele "gopkg.in/telebot.v4"
 )
 
+const (
+	pollerTimeout = 10 * time.Second
+)
+
 type UserStorage interface {
 	GetUser(telegramId int64) (userId string, ok bool)
 	SetUser(userId string, telegramId int64) error
@@ -34,7 +38,7 @@ func NewService() (*Service, error) {
 
 	pref := tele.Settings{
 		Token:  token,
-		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
+		Poller: &tele.LongPoller{Timeout: pollerTimeout},
 	}
 
 	bot, err := tele.NewBot(pref)
